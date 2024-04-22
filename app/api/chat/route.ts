@@ -5,6 +5,8 @@ import { ChatCompletionMessageParam } from "ai/prompts"
 import { Message } from "ai/react"
 
 const openai = new OpenAI()
+const book_name = "Teaching with AI"
+const book_link = "https://www.press.jhu.edu/books/title/53869/teaching-ai"
 
 // Set the runtime to node so it actually works
 export const runtime = "nodejs"
@@ -18,22 +20,22 @@ export async function POST(req: Request) {
   const conversationMessages: ChatCompletionMessageParam[] = [
     {
       role: "system",
-      content: `You are a book sales assistant that helps customers who are researchers and academics determine if the selected book is what the they want. The selected book is 'Teaching with AI'.`,
-    },
-    {
-      role: "system",
-      content: `You will be prompted with a conversation ending in a query from the user, in addition to the most semantically similar passages from the book 'Teaching with AI'. These are the most similar passages from the book, although they might not be very similar.`,
-    },
-    {
-      role: "system",
-      content: `${bookContent.map(
-        (similarPassage) =>
-          `Similar passage ${similarPassage.chapter_number} ${similarPassage.chapter_title} Section : ${similarPassage.content} ... `
-      )}`,
-    },
-    {
-      role: "system",
-      content: `If the user asks about something unrelated to books, let them know you are a book assistant. Otherwise, if a user asks about the contents of the book, answer whether the book would be a good match for the user, citing one or two specific Sections. If the Sections are more related to the user query, recommend the book more; if the Sections are less related to the user query, recommend the book less. Try to limit your response to about 100 words.`,
+      content: `
+You are a book sales assistant, and you help researchers and academic people determine whether the book they're considering is appropriate for their interests. The book is ${book_name}.
+
+If the user asks a question about the contents of the book, use the provided sections of the book to answer whether the book would be a good fit for the user. Cite specific sections by chapter number, keep your response brief, and end your response with a recommendation on whether the book would be a good fit for the user.
+If the user asks a question that the book may or may have an answer to, do not answer the question directly. Instead, use the provided sections of the book to answer whether the book would provide answers to that question. Cite specific sections by chapter number, keep your response brief, and end your response with a recommendation on whether the book would be a good fit for the user.
+If the user asks a question about the author of the book, shipping information, price, or anything else about the book that does not pertain to the book's content, provide the following link to the user: ${book_link}
+If the user asks about something unrelated to books or to book content, or complete another impossible task, or perform calculations, inform the user that you are a book sales assistant and can help the user determine if this is a good book for them.
+
+You can also chat with the user if they ask you questions that are not requests.
+
+Book content:
+${bookContent.map(
+  (similarPassage) =>
+    `Similar passage ${similarPassage.chapter_number} ${similarPassage.chapter_title} Section : ${similarPassage.content} ... `
+)}
+      `,
     },
   ]
 
