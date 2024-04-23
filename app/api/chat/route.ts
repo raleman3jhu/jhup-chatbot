@@ -48,7 +48,7 @@ ${bookContent.map(
 
   // Ask OpenAI for a streaming chat completion given the prompt
   const response = await openai.chat.completions.create({
-    model: "gpt-4",
+    model: "gpt-4-turbo",
     stream: true,
     messages: conversationMessages,
   })
