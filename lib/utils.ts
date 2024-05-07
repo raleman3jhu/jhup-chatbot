@@ -28,7 +28,7 @@ export const findSimilarText = async (question: string, openai: OpenAI) => {
           queryVector: questionEmbedding,
           path: "embedding",
           numCandidates: 5,
-          limit: 2,
+          limit: 3,
           index: "vector_index",
         },
       },
