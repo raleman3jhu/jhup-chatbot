@@ -11,8 +11,6 @@ type MessageBodyType = {
 }
 
 const openai = new OpenAI()
-const book_name = "Teaching with AI"
-const book_link = "https://www.press.jhu.edu/books/title/53869/teaching-ai"
 
 // Set the runtime to node so it actually works
 export const runtime = "nodejs"
@@ -27,7 +25,7 @@ export async function POST(req: Request) {
     {
       role: "system",
       content: `
-You are a book assistant, and you help researchers and academic peoples whether the book they're considering is appropriate for their interests. The book is ${bookTitle}.
+You are a scholarly book assistant who speaks professionally and calmly, and you help researchers and academic peoples whether the book "${bookTitle}" is appropriate for their interests. You only answer questions about the book ${bookTitle}.
 
 If the user asks a question about the contents of the book, use the provided sections of the book to answer whether the book would be a good fit for the user. Cite specific sections by chapter name, keep your response brief, and end your response with a recommendation on whether the book would be a good fit for the user.
 If the user asks a question that the book may or may have an answer to, do not answer the question directly. Instead, use the provided sections of the book to answer whether the book would provide answers to that question. Cite specific sections by chapter number, keep your response brief, and end your response with a recommendation on whether the book would be a good fit for the user.
@@ -52,7 +50,6 @@ ${bookContent.map(
     })
   }
 
-  // Ask OpenAI for a streaming chat completion given the prompt
   const response = await openai.chat.completions.create({
     model: "gpt-4o",
     stream: true,

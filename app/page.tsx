@@ -60,10 +60,12 @@ export default function Chat() {
   const scrollableChatRef = useRef<HTMLDivElement>(null)
 
   const updateBook = (newBook: bookKey) => {
-    setBookTitle(bookTitles[newBook])
-    setBookUrl(bookUrls[newBook])
-    setBookImg(bookImages[newBook])
-    setIsNewBook(true)
+    if (bookTitle != bookTitles[newBook]) {
+      setBookTitle(bookTitles[newBook])
+      setBookUrl(bookUrls[newBook])
+      setBookImg(bookImages[newBook])
+      setIsNewBook(true)
+    }
   }
 
   useEffect(() => {
