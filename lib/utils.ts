@@ -14,12 +14,16 @@ const getQuestionEmbedding = async (question: string, openai: OpenAI) => {
   return embedding.data[0].embedding
 }
 
-export const findSimilarText = async (question: string, openai: OpenAI) => {
+export const findSimilarText = async (
+  question: string,
+  title: string,
+  openai: OpenAI
+) => {
   const questionEmbedding = await getQuestionEmbedding(question, openai)
 
   const client = await clientPromise
   const db = client.db("Books")
-  const book_embeddings = db.collection("Embeddings_Small")
+  const book_embeddings = db.collection("Embeddings_New")
 
   const similarDocs = await book_embeddings
     .aggregate([
@@ -27,14 +31,18 @@ export const findSimilarText = async (question: string, openai: OpenAI) => {
         $vectorSearch: {
           queryVector: questionEmbedding,
           path: "embedding",
-          numCandidates: 5,
-          limit: 3,
-          index: "vector_index",
+          numCandidates: 10,
+          limit: 10,
+          index: "vector_search",
+        },
+      },
+      {
+        $match: {
+          book_title: title,
         },
       },
       {
         $project: {
-          chapter_number: 1,
           chapter_title: 1,
           section: 1,
           content: 1,
