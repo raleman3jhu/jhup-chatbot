@@ -81,14 +81,14 @@ export default function Chat() {
 
   //legacy prop layout on img
   return (
-    <div className='flex flex-row justify-center items-center h-screen'>
+    <div className='flex flex-col lg:flex-row lg:justify-center items-center h-screen'>
       <Image
         src={bookImg}
         alt=''
         height={400}
         width={320}
         layout='fixed'
-        className='mx-6 hidden md:block'
+        className='mx-6 hidden lg:block'
       ></Image>
       <div className='flex flex-col justify-between rounded-md items-center max-h-full bg-slate-700 px-2 my-6 mx-2'>
         <div
@@ -114,7 +114,7 @@ export default function Chat() {
           {loading && <p className='mx-auto animate-pulse'>Loading...</p>}
           {isNewBook && (
             <p className='mx-auto text-lg'>
-              You're now chatting about &apos;{bookTitle}&apos;
+              You&apos;re now chatting about &apos;{bookTitle}&apos;
             </p>
           )}
         </div>
