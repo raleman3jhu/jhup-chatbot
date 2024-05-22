@@ -2,8 +2,6 @@
 import OpenAI from "openai"
 import clientPromise from "@/lib/mongodb"
 
-// const openai = new OpenAI()
-
 const getQuestionEmbedding = async (question: string, openai: OpenAI) => {
   const embedding = await openai.embeddings.create({
     model: "text-embedding-3-small",
@@ -12,6 +10,36 @@ const getQuestionEmbedding = async (question: string, openai: OpenAI) => {
   })
 
   return embedding.data[0].embedding
+}
+
+export const getFAQ = async (question: string, openai: OpenAI) => {
+  const questionEmbedding = await getQuestionEmbedding(question, openai)
+
+  const client = await clientPromise
+  const db = client.db("FAQs")
+  const faq_embeddings = db.collection("Embeddings")
+
+  const similarDoc = await faq_embeddings
+    .aggregate([
+      {
+        $vectorSearch: {
+          queryVector: questionEmbedding,
+          path: "Answer_Embed",
+          numCandidates: 1,
+          limit: 1,
+          index: "vector_search",
+        },
+      },
+      {
+        $project: {
+          Answer: 1,
+          Question: 1,
+        },
+      },
+    ])
+    .toArray()
+
+  return similarDoc[0]
 }
 
 export const findSimilarText = async (
