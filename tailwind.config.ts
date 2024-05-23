@@ -21,6 +21,9 @@ const config: Config = {
         "90-screen": "90vh",
         "80-screen": "80vh",
       },
+      fontFamily: {
+        google: ["Poppins", "sans-serif"],
+      },
     },
   },
   plugins: [],
