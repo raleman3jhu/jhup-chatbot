@@ -24,7 +24,7 @@ export const getFAQ = async (question: string, openai: OpenAI) => {
       {
         $vectorSearch: {
           queryVector: questionEmbedding,
-          path: "Answer_Embed",
+          path: "Question_Embed",
           numCandidates: 1,
           limit: 1,
           index: "vector_search",
