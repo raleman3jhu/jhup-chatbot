@@ -49,8 +49,8 @@ export default function Page() {
       </form>
       {!(!Array.isArray(results) || !results.length) && (
         <div>
-          {results.map((result) => (
-            <p>{result}</p>
+          {results.map((result, index) => (
+            <p key={index}>{result}</p>
           ))}
         </div>
       )}
