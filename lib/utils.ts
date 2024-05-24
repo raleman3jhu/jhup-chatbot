@@ -12,7 +12,8 @@ const getQuestionEmbedding = async (question: string, openai: OpenAI) => {
   return embedding.data[0].embedding
 }
 
-export const getFAQ = async (question: string, openai: OpenAI) => {
+export const getFAQ = async (question: string) => {
+  const openai = new OpenAI()
   const questionEmbedding = await getQuestionEmbedding(question, openai)
 
   const client = await clientPromise

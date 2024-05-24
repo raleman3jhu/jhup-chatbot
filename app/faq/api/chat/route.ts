@@ -13,7 +13,7 @@ export async function POST(req: Request) {
   const { messages }: { messages: Message[] } = await req.json()
 
   const lastUserMessage = messages[messages.length - 1].content
-  const answer = await getFAQ(lastUserMessage, openai)
+  const answer = await getFAQ(lastUserMessage)
 
   const conversationMessages: ChatCompletionMessageParam[] = [
     {
