@@ -20,27 +20,28 @@ export const getFAQ = async (question: string) => {
   const db = client.db("FAQs")
   const faq_embeddings = db.collection("Embeddings")
 
-  const similarDoc = await faq_embeddings
+  const similarDocs = await faq_embeddings
     .aggregate([
       {
         $vectorSearch: {
           queryVector: questionEmbedding,
           path: "Question_Embed",
-          numCandidates: 5,
-          limit: 5,
+          numCandidates: 10,
+          limit: 10,
           index: "vector_search",
         },
       },
       {
         $project: {
           Answer: 1,
+          QuestionType: 1,
           Question: 1,
         },
       },
     ])
     .toArray()
 
-  return similarDoc[0]
+  return similarDocs
 }
 
 export const findSimilarText = async (

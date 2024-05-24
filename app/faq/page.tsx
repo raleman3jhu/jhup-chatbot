@@ -1,13 +1,21 @@
 "use client"
 
-import { useChat } from "ai/react"
-import { useState, useEffect, useRef } from "react"
+import { useState, useRef } from "react"
 import { getFAQ } from "@/lib/utils"
 
 export default function Page() {
-  const [results, setResults] = useState([])
+  const [results, setResults] = useState<any[]>([])
+  const inputRef = useRef<HTMLInputElement>(null)
 
-  // const results: string[] = ["hi"]
+  const getSimilarFaqs = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    if (inputRef.current?.value) {
+      const question = inputRef.current?.value
+      const similarFaqs = await getFAQ(question)
+      setResults(similarFaqs)
+    }
+  }
+
   return (
     <div className='flex flex-col justify-center items-center h-screen'>
       <div className='text-7xl font-google'>
@@ -21,8 +29,14 @@ export default function Page() {
         <span className='text-green-500'>l</span>
         <span className='text-blue-500'>e</span>
       </div>
-      <form className='mt-6 p-2 flex items-center bg-slate-800 rounded-full shadow-xl w-11/12 min-w-96 max-w-3xl'>
+      <form
+        onSubmit={(event) => getSimilarFaqs(event)}
+        className='my-6 p-2 flex items-center bg-slate-800 rounded-full shadow-xl w-11/12 min-w-96 max-w-3xl'
+      >
         <input
+          id='user-question'
+          type='text'
+          ref={inputRef}
           className='flex-grow bg-slate-800 text-white p-2 rounded-lg outline-none'
           placeholder='Enter your question to search the Allbook FAQs.'
         />
@@ -48,16 +62,17 @@ export default function Page() {
         </button>
       </form>
       {!(!Array.isArray(results) || !results.length) && (
-        <div>
+        <div className='h-2/3 min-w-96 max-w-3xl overflow-y-auto bg-slate-700 rounded-lg p-2'>
           {results.map((result, index) => (
-            <p key={index}>{result}</p>
+            <>
+              <h2 className='text-2xl'>{result.Question}</h2>
+              <p key={index} className='mb-4'>
+                {result.Answer}
+              </p>
+            </>
           ))}
         </div>
       )}
-      {/* <div>
-        {!(!Array.isArray(results) || !results.length) &&
-          results.map((result) => <p>{result}</p>)}
-      </div> */}
     </div>
   )
 }

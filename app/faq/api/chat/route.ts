@@ -18,7 +18,7 @@ export async function POST(req: Request) {
   const conversationMessages: ChatCompletionMessageParam[] = [
     {
       role: "system",
-      content: `Reply exactly with the following: Question: ${answer.Question} Answer: ${answer.Answer}
+      content: `Reply exactly with the following: Question: ${answer[0].Question} Answer: ${answer[0].Answer}
       `,
     },
   ]
